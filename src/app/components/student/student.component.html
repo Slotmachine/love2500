@@ -1,0 +1,161 @@
+<div class="container" *ngIf="editMode==='none'">
+  <h2>ข้อมูลนักศึกษา</h2>
+  <form class="form-inline searchstudent">
+    <input class="form-control mr-sm-2 col-md-12 col-sm-6 col-lg-6" type="text" placeholder="Search" #searchName>
+    <button class="btn btn-success mr-sm-2" type="submit" (click)="searchData(searchName.value)">ค้นหา</button>
+    <button class="btn btn-primary" type="submit" (click)="getData()">แสดงทั้งหมด</button>
+  </form>
+  <table class="table table-hover text-center">
+    <thead>
+      <tr>
+        <th>รหัสนักศึกษา</th>
+        <th>ชื่อ-นามสกุล</th>
+        <th>เบอร์โทรศัพท์</th>
+        <th>วัน/เดือน/ปีเกิด</th>
+        <th>น้ำหนัก</th>
+        <th>ส่วนสูง</th>
+        <th>E-mail</th>
+        <th>รหัสผ่าน</th>
+        <th>แก้ไข</th>
+        <th>ลบ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let student of students">
+        <td>{{student.studentID}}</td>
+        <td>{{student.studentFname}} {{student.studentLname}}</td>
+        <td>{{student.studentTel}}</td>
+        <td>{{student.studentBirthday}}/{{student.studentMonthbirthday}}/{{student.studentYearbirthday}}</td>
+        <td>{{student.studentWeight}}</td>
+        <td>{{student.studentHeight}}</td>
+        <td>{{student.studentEmail}}</td>
+        <td>{{student.studentPassword}}</td>
+        <td><button class="fa fa-pencil fa-lg editcs" aria-hidden="true" (click)="selectStudent(student)"></button></td>
+        <td><button class="fa fa-trash-o fa-lg editcs" aria-hidden="true"
+            (click)="deletestudent(student.studentID)"></button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<button type="submit" class="btn btn-success back" (click)="comaddStudent()"
+  *ngIf="editMode==='none'">เพิ่มข้อมูล</button>
+
+<div *ngIf="editMode==='Add'">
+  <div class="container col-md-4 col-sm-6 col-lg-6">
+    <h2>ระบบเพิ่มข้อมูลนักศึกษา</h2>
+    <div class="form-group">
+      <label for="usr">รหัสนักศึกษา:</label>
+      <input type="text" class="form-control" maxlength="10" [(ngModel)]="student.studentID">
+    </div>
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="pwd">ชื่อ:</label>
+        <input type="text" class="form-control" maxlength="50" [(ngModel)]="student.studentFname">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="pwd">นามสกุล:</label>
+        <input type="text" class="form-control" maxlength="50" [(ngModel)]="student.studentLname">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="pwd">เบอร์โทรศัพท์:</label>
+      <input type="text" class="form-control" maxlength="10" [(ngModel)]="student.studentTel">
+    </div>
+    <div class="row">
+      <div class="form-group col-md-4">
+        <label for="pwd">วัน:</label>
+        <input type="text" class="form-control" maxlength="2" [(ngModel)]="student.studentBirthday">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="pwd">เดือน:</label>
+        <input type="text" class="form-control" maxlength="10" [(ngModel)]="student.studentMonthbirthday">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="pwd">ปีเกิด:</label>
+        <input type="Number" class="form-control" maxlength="4" [(ngModel)]="student.studentYearbirthday">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="pwd">น้ำหนัก:</label>
+      <input type="text" class="form-control" maxlength="3" [(ngModel)]="student.studentWeight">
+    </div>
+    <div class="form-group">
+      <label for="pwd">ส่วนสูง:</label>
+      <input type="text" class="form-control" maxlength="3" [(ngModel)]="student.studentHeight">
+    </div>
+    <div class="form-group">
+      <label for="pwd">E-mail:</label>
+      <input type="text" class="form-control" maxlength="50" [(ngModel)]="student.studentEmail">
+    </div>
+    <div class="form-group">
+      <label for="pwd">รหัสผ่าน:</label>
+      <input type="password" class="form-control" maxlength="20" [(ngModel)]="student.studentPassword">
+    </div>
+    <button type="submit" class="btn btn-success sumadd" (click)="addStudent()"
+      *ngIf="editMode==='Add'">ส่งข้อมูล</button>
+    <button type="submit" class="btn btn-secondary backshow" (click)="showStudent()"
+      *ngIf="editMode==='Add'">ย้อนกลับ</button>
+  </div>
+</div>
+
+
+
+
+<div *ngIf="editMode==='edit'">
+  <div class="container col-md-4 col-sm-6 col-lg-6">
+    <h2>แก้ไขข้อมูล</h2>
+    <div class="form-group">
+      <label for="usr">รหัสนักศึกษา:</label>
+      <input type="text" class="form-control" maxlength="10" [(ngModel)]="student.studentID" selected disabled>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label for="pwd">ชื่อ:</label>
+        <input type="text" class="form-control" maxlength="50" [(ngModel)]="student.studentFname">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="pwd">นามสกุล:</label>
+        <input type="text" class="form-control" maxlength="50" [(ngModel)]="student.studentLname">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="pwd">เบอร์โทรศัพท์:</label>
+      <input type="text" class="form-control" maxlength="10" [(ngModel)]="student.studentTel">
+    </div>
+    <div class="row">
+      <div class="form-group col-md-4">
+        <label for="pwd">วัน:</label>
+        <input type="text" class="form-control" maxlength="2" [(ngModel)]="student.studentBirthday">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="pwd">เดือน:</label>
+        <input type="text" class="form-control" maxlength="10" [(ngModel)]="student.studentMonthbirthday">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="pwd">ปีเกิด:</label>
+        <input type="text" class="form-control" maxlength="4" [(ngModel)]="student.studentYearbirthday">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="pwd">น้ำหนัก:</label>
+      <input type="text" class="form-control" maxlength="3" [(ngModel)]="student.studentWeight">
+    </div>
+    <div class="form-group">
+      <label for="pwd">ส่วนสูง:</label>
+      <input type="text" class="form-control" maxlength="3" [(ngModel)]="student.studentHeight">
+    </div>
+    <div class="form-group">
+      <label for="pwd">E-mail:</label>
+      <input type="text" class="form-control" maxlength="50" [(ngModel)]="student.studentEmail">
+    </div>
+    <div class="form-group">
+      <label for="pwd">รหัสผ่าน:</label>
+      <input type="text" class="form-control" maxlength="20" [(ngModel)]="student.studentPassword">
+    </div>
+    <button type="submit" class="btn btn-warning sumaddedit" (click)="updateStudent()"
+      *ngIf="editMode==='edit'">แก้ไขข้อมูล</button>
+    <button type="submit" class="btn btn-secondary backshowedit" (click)="newStudent()"
+      *ngIf="editMode==='edit'">กรอกข้อมูลอีกครั้ง</button>
+  </div>
+</div>
